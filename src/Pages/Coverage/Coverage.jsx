@@ -1,15 +1,17 @@
-import React from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import React from "react";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useLoaderData } from 'react-router';
- 
+import { useLoaderData } from "react-router";
+
 const Coverage = () => {
-  const data =useLoaderData()
-  console.log(data)
+  const serviceCenter = useLoaderData();
+  console.log(serviceCenter)
   const position = [23.8103, 90.4125];
   return (
-    <div className='bg-base-100 shadow-sm p-10 my-20 rounded-2xl'>
-      <h1 className='text-5xl font-bold mt-10'>We are available in 64 districts</h1>
+    <div className="bg-base-100 shadow-sm p-10 my-20 rounded-2xl">
+      <h1 className="text-5xl font-bold mt-10">
+        We are available in 64 districts
+      </h1>
       <div className="my-10"></div>
       <div>
         <h1 className="text-3xl font-bold">
@@ -27,11 +29,13 @@ const Coverage = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={position}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
+          {serviceCenter.map((center, index) => (
+            <Marker key={index} position={[center.latitude, center.longitude]}>
+              <Popup>
+                A pretty CSS3 popup. <br /> Easily customizable.
+              </Popup>
+            </Marker>
+          ))}
         </MapContainer>
       </div>
     </div>
