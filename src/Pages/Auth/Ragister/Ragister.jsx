@@ -2,15 +2,47 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../Hook/useAuth';
 import { FcGoogle } from 'react-icons/fc';
+import GoogleLogin from '../GoogleLogin/GoogleLogin';
+import axios from 'axios';
+import { Link, useLocation, useNavigate } from 'react-router';
 
 const Ragister = () => {
   const {register,handleSubmit,formState:{errors}}=useForm()
-  const { createUser } = useAuth();
+  const { createUser, updateUserProfle } = useAuth();
+  const location =useLocation()
+  const navigate =useNavigate()
    
   const handleRagistration =(data)=>{
+    console.log('after resinter ',data.photo[0])
+    const profileImage =data.photo[0]
      createUser(data.email,data.password)
-     .then(res =>{
-      console.log(res)
+     .then(() =>{
+      // 1. store the image in from data
+      const fromData=new FormData();
+      fromData.append('image',profileImage)
+      // 2. sentd the photo to store adn |
+      const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_PHOTO_IMAGE_KEY}`;
+      
+      axios.post(image_API_URL,fromData)
+      .then( res =>{
+        console.log('image upload',res.data.data.url)
+        const photoUpdate =res.data.data.url;
+        const profile = {
+          displayName: data.name,
+          photoURL: photoUpdate
+        };
+        // update profile
+        updateUserProfle(profile)
+        .then(()=>{
+          console.log('after update profile')
+          navigate(location.state, '/')
+        })
+        .catch(erro =>{
+          console.log(erro);
+          
+        })
+      })
+
      })
      .catch(error =>{
       console.log(error)
@@ -30,7 +62,7 @@ const Ragister = () => {
         <div className="p-8">
           <form onSubmit={handleSubmit(handleRagistration)}>
             <div className="form-control space-y-3">
-              {/* Email Field */}
+              {/* Name Field */}
               <div>
                 <label className="label">
                   <span className="label-text font-medium">Name</span>
@@ -45,6 +77,23 @@ const Ragister = () => {
                   placeholder="Name"
                   className="input input-bordered w-full h-12 text-base"
                   {...register("name", { required: true })}
+                />
+              </div>
+              {/* Photo image Field */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium"></span>
+                </label>
+
+                {errors.photo && (
+                  <p className="text-red-500 text-sm">Name is required</p>
+                )}
+
+                <input
+                  type="file"
+                  placeholder="Name"
+                  className="file-input file-input-ghost"
+                  {...register("photo", { required: true })}
                 />
               </div>
               {/* Email Field */}
@@ -97,9 +146,6 @@ const Ragister = () => {
                 />
               </div>
 
-             
- 
-
               {/* Login Button */}
               <button className="btn bg-primary text-white w-full text-lg h-12">
                 Login
@@ -109,9 +155,7 @@ const Ragister = () => {
               <div className="text-center">
                 <p className="text-sm">
                   Don't have an account?{" "}
-                  <a href="#" className="link link-primary font-medium">
-                    Login
-                  </a>
+                  <Link state={location.state} to='/login' className="link link-primary font-medium">login</Link>
                 </p>
               </div>
 
@@ -123,13 +167,7 @@ const Ragister = () => {
               </div>
 
               {/* Google Login */}
-              <button
-                type="button"
-                className="btn btn-outline w-full h-12 flex items-center justify-center gap-3 bg-gray-300 text-base"
-              >
-                <FcGoogle className="text-2xl" />
-                Login with Google
-              </button>
+              <GoogleLogin />
             </div>
           </form>
         </div>

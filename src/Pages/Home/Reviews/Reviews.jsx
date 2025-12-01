@@ -24,7 +24,7 @@ const Reviews = ({ reviewsPromise }) => {
         centeredSlides={true}
         slidesPerView={3}
         loop={true}
-        autoplay={{ delay: 1000 }}
+        autoplay={{ delay: 5000 }}
         coverflowEffect={{
           rotate: 30,
           stretch: '50%',

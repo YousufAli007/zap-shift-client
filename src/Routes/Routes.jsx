@@ -6,6 +6,8 @@ import Coverage from "../Pages/Coverage/Coverage";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Auth/Login/Login";
 import Ragister from "../Pages/Auth/Ragister/Ragister";
+import PrivatRoutes from "./PrivatRoutes";
+import Raider from "../Pages/Raider/Raider";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
         loader: () => fetch("../warehouses.json"),
         element: <Coverage />,
       },
+      {
+        path:'rider',
+        element:<PrivatRoutes><Raider></Raider></PrivatRoutes>
+      }
     ],
   },
   {

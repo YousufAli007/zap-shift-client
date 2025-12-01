@@ -1,11 +1,16 @@
 import React   from 'react';
 import { AuthContext } from '../../../Context/AuthContext/AuthContext';
-import { FcGoogle } from 'react-icons/fc';
 import useAuth from '../../../Hook/useAuth';
 import { useForm } from 'react-hook-form';
+import GoogleLogin from '../GoogleLogin/GoogleLogin';
+import { Link, useLocation, useNavigate } from 'react-router';
 
 const Login = () => {
   const {singnInUser}=useAuth();
+  const navigate =useNavigate()
+  const location =useLocation()
+  console.log(location);
+  
     const {
       register,
       handleSubmit,
@@ -16,6 +21,7 @@ const Login = () => {
       singnInUser(data.email,data.password)
       .then(res =>{
         console.log(res)
+        navigate(location?.state || '/')
       })
       .catch(error =>{
         console.log(error.message)
@@ -101,9 +107,7 @@ const Login = () => {
               <div className="text-center">
                 <p className="text-sm">
                   Don't have an account?{" "}
-                  <a href="#" className="link link-primary font-medium">
-                    Register
-                  </a>
+                   <Link state={location.state} to='/ragister' className="link link-primary font-medium">Register</Link>
                 </p>
               </div>
 
@@ -114,14 +118,7 @@ const Login = () => {
                 <div className="flex-1 h-px bg-base-300"></div>
               </div>
 
-              {/* Google Login */}
-              <button
-                type="button"
-                className="btn btn-outline w-full h-12 flex items-center justify-center gap-3 bg-gray-300 text-base"
-              >
-                <FcGoogle className="text-2xl" />
-                Login with Google
-              </button>
+              <GoogleLogin/>
             </div>
           </form>
         </div>

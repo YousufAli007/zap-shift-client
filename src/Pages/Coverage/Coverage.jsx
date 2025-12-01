@@ -21,7 +21,7 @@ const Coverage = () => {
       <div className="w-full border h-[800px] my-10">
         <MapContainer
           center={position}
-          zoom={13}
+          zoom={8}
           scrollWheelZoom={false}
           className="h-[800px]"
         >
