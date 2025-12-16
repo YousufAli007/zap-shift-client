@@ -16,11 +16,21 @@ const Navber = () => {
   const links = (
     <>
       <li>
-        <NavLink to='/about'>About us</NavLink>
+        <NavLink to="/about">About us</NavLink>
       </li>
       <li>
-        <NavLink to='/coverage'>Coverage</NavLink>
+        <NavLink to="/coverage">Coverage</NavLink>
       </li>
+      <li>
+        <NavLink to="/send-percel">SendPercel</NavLink>
+      </li>
+      {user && (
+        <>
+          <li>
+            <NavLink to="/dashboard/my-parcels">Dashbord</NavLink>
+          </li>
+        </>
+      )}
     </>
   );
   return (

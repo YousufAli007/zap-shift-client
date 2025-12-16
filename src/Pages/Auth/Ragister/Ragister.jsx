@@ -5,12 +5,14 @@ import { FcGoogle } from 'react-icons/fc';
 import GoogleLogin from '../GoogleLogin/GoogleLogin';
 import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router';
+import useAxiosSecure from '../../../Hook/useAxiosSecure';
 
 const Ragister = () => {
   const {register,handleSubmit,formState:{errors}}=useForm()
   const { createUser, updateUserProfle } = useAuth();
   const location =useLocation()
   const navigate =useNavigate()
+  const axiosSecure =useAxiosSecure()
    
   const handleRagistration =(data)=>{
     console.log('after resinter ',data.photo[0])
@@ -31,6 +33,18 @@ const Ragister = () => {
           displayName: data.name,
           photoURL: photoUpdate
         };
+        // user update in DataBase
+        const userInfo = {
+          email: data.email,
+          displayName: data.name,
+          photoURL: photoUpdate,
+        };
+          axiosSecure.post("/users", userInfo)
+          .then(res =>{
+            if(res.data.insertedId){
+              console.log('user created in the database')
+            }
+          })
         // update profile
         updateUserProfle(profile)
         .then(()=>{

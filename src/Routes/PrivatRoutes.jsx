@@ -5,7 +5,7 @@ import { Navigate, useLocation } from 'react-router';
 const PrivatRoutes = ({children}) => {
   const {user,loding}=useAuth()
   const location =useLocation()
-  console.log(location)
+  // console.log(location)
   if(loding){
     return <p>Loding</p>
   }
